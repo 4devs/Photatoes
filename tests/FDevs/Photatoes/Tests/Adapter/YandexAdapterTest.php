@@ -179,35 +179,27 @@ class YandexAdapterTest extends TestCase
     {
         $client = $this->getMock('Guzzle\Http\Client');
         $data = $this->getData();
-        $client->expects($this->any())
-            ->method('get')
-            ->will($this->returnCallback(function ($url) use ($data) {
-
-                return isset($data[$url]) ? $this->getRequest($data[$url]) : $this->getRequest('{}');
-            }));
-
-        return $client;
-    }
-
-    private function getRequest($response)
-    {
         $responsePhoto = $this->getMockBuilder('Guzzle\Http\Message\Response')
             ->disableOriginalConstructor()
             ->getMock();
-
         $requestPhoto = $this->getMockBuilder('Guzzle\Http\Message\Request')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $responsePhoto->expects($this->any())
-            ->method('getBody')
-            ->will($this->returnValue($response));
+        $client->expects($this->any())
+            ->method('get')
+            ->will($this->returnCallback(function ($url) use ($data, $responsePhoto, $requestPhoto) {
+                $responsePhoto->expects($this->any())
+                    ->method('getBody')
+                    ->will($this->returnValue(isset($data[$url]) ? $data[$url] : '{}'));
+                $requestPhoto->expects($this->any())
+                    ->method('send')
+                    ->will($this->returnValue($responsePhoto));
 
-        $requestPhoto->expects($this->any())
-            ->method('send')
-            ->will($this->returnValue($responsePhoto));
+                return $requestPhoto;
+            }));
 
-        return $requestPhoto;
+        return $client;
     }
 
     private function getData()
