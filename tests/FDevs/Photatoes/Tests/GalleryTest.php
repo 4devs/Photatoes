@@ -33,6 +33,14 @@ class GalleryTest extends TestCase
         $this->assertCount(2, $album->getImages());
     }
 
+    public function testSave(){
+        $gallery = $this->getGallery();
+        $this->assertFalse($gallery->save());
+
+        $gallery->setManager($this->getManger());
+        $this->assertTrue($gallery->save());
+    }
+
     public function testImages()
     {
         $album = $this->getGallery();

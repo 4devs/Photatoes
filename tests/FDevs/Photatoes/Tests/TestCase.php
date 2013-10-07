@@ -86,6 +86,18 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $adapter->expects($this->any())
+            ->method('saveGallery')
+            ->will($this->returnValue(true));
+
+        $adapter->expects($this->any())
+            ->method('getTagList')
+            ->will($this->returnValue(array('testTag')));
+
+        $adapter->expects($this->any())
+            ->method('getImagesByTag')
+            ->will($this->returnValue(array($image)));
+
+        $adapter->expects($this->any())
             ->method('getGallery')
             ->with($this->isInstanceOf('FDevs\Photatoes\Gallery'))
             ->will($this->returnCallback(function ($val) use ($testGallery) {

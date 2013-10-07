@@ -27,7 +27,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * init
      *
-     * @param string          $user
+     * @param string $user
      * @param ClientInterface $client
      */
     public function __construct($user, ClientInterface $client = null)
@@ -50,27 +50,6 @@ class YandexAdapter implements AdapterInterface
         $photo = $this->getData($image->getId());
 
         return $this->mappingImage($image, $photo);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function mappingImage(Image $image, $data)
-    {
-        if (isset($data['summary'])) {
-            $image->setDescription($data['summary']);
-        }
-        if (isset($data['title'])) {
-            $image->setTitle($data['title'])
-                ->setPublishAt(new \DateTime($data['published']))
-                ->setUpdateAt(new \DateTime($data['updated']))
-                ->setTags($data['tags']);
-            foreach ($data['img'] as $value) {
-                $image->addMeta(new Meta($value['href'], $value['width'], $value['height']));
-            }
-        }
-
-        return $image;
     }
 
     /**
@@ -125,8 +104,7 @@ class YandexAdapter implements AdapterInterface
         $data = $this->getData('', 'albums');
         if (isset($data['entries'])) {
             foreach ($data['entries'] as $entry) {
-                $id = array_slice(explode(':', $entry['id']), -1, 1);
-                $albums[] = $this->setGallery($entry, new Gallery($id[0], $manager));
+                $albums[] = $this->setGallery($entry, new Gallery($this->getId($entry['id']), $manager));
             }
         }
 
@@ -150,6 +128,76 @@ class YandexAdapter implements AdapterInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getTagList()
+    {
+        $tags = array();
+        $data = $this->getData('', 'tags');
+        if (isset($data['entries'])) {
+            foreach ($data['entries'] as $tag) {
+                $tags[] = $tag['title'];
+            }
+        }
+
+        return $tags;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getImagesByTag($tag, Manager $manager = null)
+    {
+        $data = $this->getData(urlencode($tag), 'tag');
+        $images = array();
+        if (isset($data['entries'])) {
+            foreach ($data['entries'] as $img) {
+                $image = new Image($this->getId($img['id']), $manager);
+                $images[] = $this->mappingImage($image, $img);
+            }
+        }
+
+        return $images;
+    }
+
+    /**
+     * mapping Image
+     *
+     * @param Image $image
+     * @param array $data
+     * @return Image
+     */
+    private function mappingImage(Image $image, array $data)
+    {
+        if (isset($data['summary'])) {
+            $image->setDescription($data['summary']);
+        }
+        if (isset($data['title'])) {
+            $image->setTitle($data['title'])
+                ->setPublishAt(new \DateTime($data['published']))
+                ->setUpdateAt(new \DateTime($data['updated']))
+                ->setTags(array_keys($data['tags']));
+            foreach ($data['img'] as $value) {
+                $image->addMeta(new Meta($value['href'], $value['width'], $value['height']));
+            }
+        }
+
+        return $image;
+    }
+
+    /**
+     * get Id
+     *
+     * @param string $id
+     * @return string
+     */
+    private function getId($id)
+    {
+        $return = array_slice(explode(':', $id), -1, 1);
+        return count($return) ? $return[0] : '';
+    }
+
+    /**
      * get Base Url
      *
      * @return string
@@ -162,7 +210,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * set Gallery
      *
-     * @param  array   $data  album
+     * @param  array $data album
      * @param  Gallery $album
      * @return Gallery
      */
@@ -205,6 +253,12 @@ class YandexAdapter implements AdapterInterface
             case 'albums':
                 $url = 'albums/';
                 break;
+            case 'tags':
+                $url = 'tags/';
+                break;
+            case 'tag':
+                $url = 'tag/%s/photos/';
+                break;
             default:
                 $url = '/';
         }
@@ -215,7 +269,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * set Cover List
      *
-     * @param array   $listCover
+     * @param array $listCover
      * @param Gallery $album
      */
     private function setListCover(array $listCover, Gallery $album)

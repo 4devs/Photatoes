@@ -35,4 +35,17 @@ class ManagerTest extends TestCase
         $this->assertCount(1, $manager->getGalleryList());
         $this->assertInternalType('array', $manager->getGalleryList());
     }
+
+    public function testGetTagList()
+    {
+        $manager = $this->getManger();
+        $this->assertCount(1, $manager->getTagList());
+    }
+
+    public function testGetImagesByTag()
+    {
+        $manager = $this->getManger();
+        $this->assertCount(1, $manager->getImagesByTag('testTag'));
+        $this->assertInstanceOf('FDevs\Photatoes\Image', current($manager->getImagesByTag('testTag')));
+    }
 }

@@ -18,7 +18,7 @@ interface AdapterInterface
     /**
      * get Photo
      *
-     * @param  Image                  $image
+     * @param  Image $image
      * @return \FDevs\Photatoes\Image
      */
     public function getImage(Image $image);
@@ -26,19 +26,10 @@ interface AdapterInterface
     /**
      * put image on server
      *
-     * @param  Image   $image
+     * @param  Image $image
      * @return boolean
      */
     public function saveImage(Image $image);
-
-    /**
-     * mapping Image
-     *
-     * @param  Image $image
-     * @param  mixed $data
-     * @return Image
-     */
-    public function mappingImage(Image $image, $data);
 
     /**
      * get Gallery
@@ -76,8 +67,24 @@ interface AdapterInterface
      * get Galleries
      *
      * @param  Manager $manager
-     * @return mixed
+     * @return Gallery[]
      */
     public function getListGallery(Manager $manager);
+
+    /**
+     * get All Tags
+     *
+     * @return array
+     */
+    public function getTagList();
+
+    /**
+     * get Images By Tag
+     *
+     * @param string $tag
+     * @param Manager $manager
+     * @return Image[]
+     */
+    public function getImagesByTag($tag, Manager $manager);
 
 }

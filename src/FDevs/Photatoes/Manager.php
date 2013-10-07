@@ -43,7 +43,7 @@ class Manager
      * get Image
      *
      * @param  string $key
-     * @param  bool   $create
+     * @param  bool $create
      * @return Image
      */
     public function getImage($key, $create = false)
@@ -54,7 +54,7 @@ class Manager
     /**
      * get Gallery
      *
-     * @param  string  $id
+     * @param  string $id
      * @return Gallery
      */
     public function getGallery($id)
@@ -70,6 +70,27 @@ class Manager
     public function getGalleryList()
     {
         return $this->adapter->getListGallery($this);
+    }
+
+    /**
+     * get Tag List
+     *
+     * @return array
+     */
+    public function getTagList()
+    {
+        return $this->adapter->getTagList();
+    }
+
+    /**
+     * get Images By Tag
+     *
+     * @param $tag
+     * @return Image[]
+     */
+    public function getImagesByTag($tag)
+    {
+        return $this->adapter->getImagesByTag($tag, $this);
     }
 
     /**
