@@ -189,12 +189,12 @@ class YandexAdapterTest extends TestCase
         $client->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($url) use ($data, $responsePhoto, $requestPhoto) {
-                $responsePhoto->expects($this->any())
+                $responsePhoto->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
                     ->method('getBody')
-                    ->will($this->returnValue(isset($data[$url]) ? $data[$url] : '{}'));
-                $requestPhoto->expects($this->any())
+                    ->will(new \PHPUnit_Framework_MockObject_Stub_Return(isset($data[$url]) ? $data[$url] : '{}'));
+                $requestPhoto->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
                     ->method('send')
-                    ->will($this->returnValue($responsePhoto));
+                    ->will(new \PHPUnit_Framework_MockObject_Stub_Return($responsePhoto));
 
                 return $requestPhoto;
             }));
