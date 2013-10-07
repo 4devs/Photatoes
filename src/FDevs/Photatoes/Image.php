@@ -9,8 +9,6 @@
 
 namespace FDevs\Photatoes;
 
-use FDevs\Photatoes\Exception\RuntimeException;
-
 class Image implements \Serializable
 {
     /**
@@ -56,7 +54,7 @@ class Image implements \Serializable
     /**
      * init
      *
-     * @param string $id id image
+     * @param string  $id      id image
      * @param Manager $manager
      */
     public function __construct($id, Manager $manager = null)
@@ -77,6 +75,7 @@ class Image implements \Serializable
     public function setManager(Manager $manager)
     {
         $this->manager = $manager;
+
         return $this;
     }
 
@@ -132,7 +131,7 @@ class Image implements \Serializable
 
     /**
      * get Img
-     * @param string $size
+     * @param  string    $size
      * @return Meta|null
      */
     public function get($size)

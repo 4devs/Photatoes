@@ -18,7 +18,7 @@ interface AdapterInterface
     /**
      * get Photo
      *
-     * @param Image $image
+     * @param  Image                  $image
      * @return \FDevs\Photatoes\Image
      */
     public function getImage(Image $image);
@@ -26,7 +26,7 @@ interface AdapterInterface
     /**
      * put image on server
      *
-     * @param Image $image
+     * @param  Image   $image
      * @return boolean
      */
     public function saveImage(Image $image);
@@ -34,8 +34,8 @@ interface AdapterInterface
     /**
      * mapping Image
      *
-     * @param Image $image
-     * @param mixed $data
+     * @param  Image $image
+     * @param  mixed $data
      * @return Image
      */
     public function mappingImage(Image $image, $data);
@@ -43,7 +43,7 @@ interface AdapterInterface
     /**
      * get Gallery
      *
-     * @param Gallery $album
+     * @param  Gallery $album
      * @return Gallery
      */
     public function getGallery(Gallery $album);
@@ -51,7 +51,7 @@ interface AdapterInterface
     /**
      * get Cover
      *
-     * @param Gallery $album
+     * @param  Gallery $album
      * @return Gallery
      */
     public function getCover(Gallery $album);
@@ -59,7 +59,7 @@ interface AdapterInterface
     /**
      * save Gallery
      *
-     * @param Gallery $album
+     * @param  Gallery $album
      * @return boolean
      */
     public function saveGallery(Gallery $album);
@@ -67,7 +67,7 @@ interface AdapterInterface
     /**
      * get Images Gallery
      *
-     * @param Gallery $album
+     * @param  Gallery $album
      * @return Gallery
      */
     public function getImagesGallery(Gallery $album);
@@ -75,9 +75,9 @@ interface AdapterInterface
     /**
      * get Galleries
      *
-     * @param Manager $manager
+     * @param  Manager $manager
      * @return mixed
      */
     public function getListGallery(Manager $manager);
 
-} 
+}

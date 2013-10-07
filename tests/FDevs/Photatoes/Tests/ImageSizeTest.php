@@ -9,7 +9,6 @@
 
 namespace FDevs\Photatoes\Tests;
 
-
 use FDevs\Photatoes\ImageSize;
 
 class ImageSizeTest extends TestCase
@@ -38,4 +37,4 @@ class ImageSizeTest extends TestCase
         $this->assertEquals('orig', ImageSize::getSize(1025, 0));
         $this->assertEquals('orig', ImageSize::getSize(1025, 0));
     }
-} 
+}

@@ -9,7 +9,6 @@
 
 namespace FDevs\Photatoes;
 
-
 class ImageSize
 {
     const SIZE_ORIG = 'orig';
@@ -79,7 +78,7 @@ class ImageSize
     /**
      * get name allowed return
      *
-     * @param string $name
+     * @param  string      $name
      * @return string|null
      */
     public static function get($name)
@@ -92,7 +91,7 @@ class ImageSize
     /**
      * has size
      *
-     * @param string $name
+     * @param  string $name
      * @return bool
      */
     public static function has($name)
@@ -101,8 +100,8 @@ class ImageSize
     }
 
     /**
-     * @param int $width
-     * @param int $height
+     * @param  int    $width
+     * @param  int    $height
      * @return string
      */
     public static function getSize($width = 0, $height = 0)

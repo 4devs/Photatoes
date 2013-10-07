@@ -19,4 +19,4 @@ class RuntimeExceptionTest extends TestCase
         $ex = new RuntimeException();
         $this->assertInstanceOf('\RuntimeException', $ex);
     }
-} 
+}

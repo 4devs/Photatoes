@@ -9,6 +9,7 @@
 
 namespace FDevs\Photatoes\Tests;
 
+use FDevs\Photatoes\Adapter\AdapterInterface;
 use FDevs\Photatoes\Gallery;
 use FDevs\Photatoes\Image;
 use FDevs\Photatoes\Manager;
@@ -18,16 +19,21 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * @return Manager
+     * @param  AdapterInterface $adapter
      */
-    protected function getManger()
+    protected function getManger(AdapterInterface $adapter = null)
     {
-        return new Manager($this->getMockAdapter());
+        if (!$adapter) {
+            $adapter = $this->getMockAdapter();
+        }
+
+        return new Manager($adapter);
     }
 
     /**
-     * @param string $href
-     * @param int $width
-     * @param int $height
+     * @param  string $href
+     * @param  int    $width
+     * @param  int    $height
      * @return Meta
      */
     protected function getMeta($href = '', $width = 0, $height = 0)
@@ -37,7 +43,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     /**
      *
-     * @param string $data
+     * @param  string $data
      * @return Image
      */
     protected function getImage($data = 'testId')
@@ -48,7 +54,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * get Gallery
      *
-     * @param string $data id album
+     * @param  string  $data id album
      * @return Gallery
      */
     protected function getGallery($data = 'testId')
@@ -106,4 +112,4 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         return $adapter;
     }
 
-} 
+}

@@ -49,7 +49,7 @@ class Gallery implements \Serializable
     /**
      * init
      *
-     * @param string $id
+     * @param string       $id
      * @param Manager|null $manager
      */
     public function __construct($id, Manager $manager = null)
@@ -124,7 +124,7 @@ class Gallery implements \Serializable
     /**
      * get Images
      *
-     * @param bool $reload
+     * @param  bool                     $reload
      * @return \FDevs\Photatoes\Image[]
      */
     public function getImages($reload = false)
@@ -214,7 +214,7 @@ class Gallery implements \Serializable
     /**
      * get Cover
      *
-     * @param bool $reload
+     * @param  bool                    $reload
      * @return \FDevs\Photatoes\Meta[]
      */
     public function getCover($reload = false)
@@ -289,4 +289,4 @@ class Gallery implements \Serializable
             ) = $data;
     }
 
-} 
+}

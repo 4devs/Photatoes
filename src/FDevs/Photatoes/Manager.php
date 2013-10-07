@@ -42,8 +42,8 @@ class Manager
     /**
      * get Image
      *
-     * @param string $key
-     * @param bool $create
+     * @param  string $key
+     * @param  bool   $create
      * @return Image
      */
     public function getImage($key, $create = false)
@@ -54,7 +54,7 @@ class Manager
     /**
      * get Gallery
      *
-     * @param string $id
+     * @param  string  $id
      * @return Gallery
      */
     public function getGallery($id)
@@ -75,7 +75,7 @@ class Manager
     /**
      * create Image
      *
-     * @param string $key
+     * @param  string $key
      * @return Image
      */
     private function createImage($key)

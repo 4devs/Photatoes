@@ -27,7 +27,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * init
      *
-     * @param string $user
+     * @param string          $user
      * @param ClientInterface $client
      */
     public function __construct($user, ClientInterface $client = null)
@@ -144,7 +144,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function saveGallery(Gallery $image)
+    public function saveGallery(Gallery $gallery)
     {
         return false;
     }
@@ -162,8 +162,8 @@ class YandexAdapter implements AdapterInterface
     /**
      * set Gallery
      *
-     * @param array $data album
-     * @param Gallery $album
+     * @param  array   $data  album
+     * @param  Gallery $album
      * @return Gallery
      */
     private function setGallery(array $data, Gallery $album)
@@ -186,8 +186,8 @@ class YandexAdapter implements AdapterInterface
     /**
      * get Api Url
      *
-     * @param string $type album|photo|albumPhotos|albums or base path
-     * @param string $key
+     * @param  string $type album|photo|albumPhotos|albums or base path
+     * @param  string $key
      * @return string
      */
     private function getUrl($type, $key)
@@ -215,7 +215,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * set Cover List
      *
-     * @param array $listCover
+     * @param array   $listCover
      * @param Gallery $album
      */
     private function setListCover(array $listCover, Gallery $album)
@@ -228,8 +228,8 @@ class YandexAdapter implements AdapterInterface
     /**
      * get Data
      *
-     * @param string $key
-     * @param string $type
+     * @param  string $key
+     * @param  string $type
      * @return array
      */
     private function getData($key, $type = 'photo')
@@ -242,6 +242,7 @@ class YandexAdapter implements AdapterInterface
         } catch (\Exception $e) {
             $data = array();
         }
+
         return $data;
     }
 }

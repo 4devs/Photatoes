@@ -9,7 +9,6 @@
 
 namespace FDevs\Photatoes;
 
-
 class Meta implements \Serializable
 {
     /**
@@ -36,10 +35,10 @@ class Meta implements \Serializable
      * init
      *
      * @param string $href
-     * @param int $height
-     * @param int $width
+     * @param int    $height
+     * @param int    $width
      */
-    function __construct($href, $width = 0, $height = 0)
+    public function __construct($href, $width = 0, $height = 0)
     {
         $this->height = $height;
         $this->href = $href;
@@ -58,6 +57,7 @@ class Meta implements \Serializable
             $this->height,
             $this->size
         );
+
         return serialize($data);
     }
 
