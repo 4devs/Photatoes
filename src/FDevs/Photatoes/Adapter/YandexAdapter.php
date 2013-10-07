@@ -27,7 +27,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * init
      *
-     * @param string          $user
+     * @param string $user
      * @param ClientInterface $client
      */
     public function __construct($user, ClientInterface $client = null)
@@ -162,7 +162,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * set Gallery
      *
-     * @param  array   $data  album
+     * @param  array $data album
      * @param  Gallery $album
      * @return Gallery
      */
@@ -215,7 +215,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * set Cover List
      *
-     * @param array   $listCover
+     * @param array $listCover
      * @param Gallery $album
      */
     private function setListCover(array $listCover, Gallery $album)
@@ -235,7 +235,8 @@ class YandexAdapter implements AdapterInterface
     private function getData($key, $type = 'photo')
     {
         try {
-            $request = $this->client->get($this->getUrl($type, $key));
+            $url = $this->getUrl($type, $key);
+            $request = $this->client->get($url);
             $response = $request->send();
             $decoder = new JsonDecode(true);
             $data = $decoder->decode($response->getBody(true), 'json');

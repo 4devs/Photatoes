@@ -179,24 +179,27 @@ class YandexAdapterTest extends TestCase
     {
         $client = $this->getMock('Guzzle\Http\Client');
         $data = $this->getData();
-        $responsePhoto = $this->getMockBuilder('Guzzle\Http\Message\Response')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $requestPhoto = $this->getMockBuilder('Guzzle\Http\Message\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $response = array();
+        foreach ($data as $key => $value) {
+            $responsePhoto = $this->getMockBuilder('Guzzle\Http\Message\Response')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $responsePhoto->expects($this->any())
+                ->method('getBody')
+                ->will($this->returnValue($value));
+
+            $response[$key] = $this->getMockBuilder('Guzzle\Http\Message\Request')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $response[$key]->expects($this->any())
+                ->method('send')
+                ->will($this->returnValue($responsePhoto));
+        }
 
         $client->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($url) use ($data, $responsePhoto, $requestPhoto) {
-                $responsePhoto->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
-                    ->method('getBody')
-                    ->will(new \PHPUnit_Framework_MockObject_Stub_Return(isset($data[$url]) ? $data[$url] : '{}'));
-                $requestPhoto->expects(new \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
-                    ->method('send')
-                    ->will(new \PHPUnit_Framework_MockObject_Stub_Return($responsePhoto));
-
-                return $requestPhoto;
+            ->will($this->returnCallback(function ($url) use ($response) {
+                return $response[$url];
             }));
 
         return $client;
