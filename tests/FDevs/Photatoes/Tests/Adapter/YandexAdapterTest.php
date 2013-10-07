@@ -178,10 +178,10 @@ class YandexAdapterTest extends TestCase
     private function getMockClient()
     {
         $client = $this->getMock('Guzzle\Http\Client');
+        $data = $this->getData();
         $client->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($url) {
-                $data = $this->getData();
+            ->will($this->returnCallback(function ($url) use ($data) {
 
                 return isset($data[$url]) ? $this->getRequest($data[$url]) : $this->getRequest('{}');
             }));
