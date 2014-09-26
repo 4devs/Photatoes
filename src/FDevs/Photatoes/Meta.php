@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Andrey Samusev <Andrey.Samusev@exigenservices.com>
+ * @author    Andrey Samusev <Andrey.Samusev@exigenservices.com>
  * @copyright andrey 9/16/13
  *
  * For the full copyright and license information, please view the LICENSE
@@ -47,6 +47,16 @@ class Meta implements \Serializable
     }
 
     /**
+     * to String
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->href;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function serialize()
@@ -79,6 +89,7 @@ class Meta implements \Serializable
      * set Size
      *
      * @param string $size
+     *
      * @return $this
      */
     public function setSize($size)
@@ -102,6 +113,7 @@ class Meta implements \Serializable
 
     /**
      * @param int $height
+     *
      * @return $this
      */
     public function setHeight($height)
@@ -121,6 +133,7 @@ class Meta implements \Serializable
 
     /**
      * @param string $href
+     *
      * @return $this
      */
     public function setHref($href)
@@ -144,6 +157,7 @@ class Meta implements \Serializable
      * set Width
      *
      * @param int $width
+     *
      * @return $this
      */
     public function setWidth($width)
