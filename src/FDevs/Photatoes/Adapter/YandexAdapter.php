@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Andrey Samusev <Andrey.Samusev@exigenservices.com>
+ * @author    Andrey Samusev <andrey@4devs.org>
  * @copyright andrey 9/10/13
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,7 +27,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * init
      *
-     * @param string $user
+     * @param string          $user
      * @param ClientInterface $client
      */
     public function __construct($user, ClientInterface $client = null)
@@ -47,7 +47,7 @@ class YandexAdapter implements AdapterInterface
      */
     public function getImage(Image $image)
     {
-        $photo = $this->getData($image->getId());
+        $photo = $this->getDataByType($image->getId());
 
         return $this->mappingImage($image, $photo);
     }
@@ -57,7 +57,7 @@ class YandexAdapter implements AdapterInterface
      */
     public function getGallery(Gallery $album)
     {
-        $data = $this->getData($album->getId(), 'album');
+        $data = $this->getDataByType($album->getId(), 'album');
         $this->setGallery($data, $album);
 
         return $album;
@@ -68,10 +68,10 @@ class YandexAdapter implements AdapterInterface
      */
     public function getCover(Gallery $album)
     {
-        $data = $this->getData($album->getId(), 'album');
+        $data = $this->getDataByType($album->getId(), 'album');
         if (isset($data['links']['cover'])) {
             $idImage = array_slice(explode('/', $data['links']['cover']), -2, 1);
-            $data = $this->getData($idImage[0]);
+            $data = $this->getDataByType($idImage[0]);
             $this->setListCover($data['img'], $album);
         }
 
@@ -83,7 +83,7 @@ class YandexAdapter implements AdapterInterface
      */
     public function getImagesGallery(Gallery $album)
     {
-        $data = $this->getData($album->getId(), 'albumPhotos');
+        $data = $this->getDataByType($album->getId(), 'albumPhotos');
         if (isset($data['entries'])) {
             foreach ($data['entries'] as $dataImage) {
                 $image = new Image(substr(strrchr($dataImage['id'], ':'), 1));
@@ -101,7 +101,7 @@ class YandexAdapter implements AdapterInterface
     public function getListGallery(Manager $manager)
     {
         $albums = array();
-        $data = $this->getData('', 'albums');
+        $data = $this->getDataByType('', 'albums');
         if (isset($data['entries'])) {
             foreach ($data['entries'] as $entry) {
                 $albums[] = $this->setGallery($entry, new Gallery($this->getId($entry['id']), $manager));
@@ -133,7 +133,7 @@ class YandexAdapter implements AdapterInterface
     public function getTagList()
     {
         $tags = array();
-        $data = $this->getData('', 'tags');
+        $data = $this->getDataByType('', 'tags');
         if (isset($data['entries'])) {
             foreach ($data['entries'] as $tag) {
                 $tags[] = $tag['title'];
@@ -148,7 +148,7 @@ class YandexAdapter implements AdapterInterface
      */
     public function getImagesByTag($tag, Manager $manager = null)
     {
-        $data = $this->getData(urlencode($tag), 'tag');
+        $data = $this->getDataByType(urlencode($tag), 'tag');
         $images = array();
         if (isset($data['entries'])) {
             foreach ($data['entries'] as $img) {
@@ -165,6 +165,7 @@ class YandexAdapter implements AdapterInterface
      *
      * @param Image $image
      * @param array $data
+     *
      * @return Image
      */
     private function mappingImage(Image $image, array $data)
@@ -189,11 +190,13 @@ class YandexAdapter implements AdapterInterface
      * get Id
      *
      * @param string $id
+     *
      * @return string
      */
     private function getId($id)
     {
         $return = array_slice(explode(':', $id), -1, 1);
+
         return count($return) ? $return[0] : '';
     }
 
@@ -210,8 +213,9 @@ class YandexAdapter implements AdapterInterface
     /**
      * set Gallery
      *
-     * @param  array $data album
+     * @param  array   $data album
      * @param  Gallery $album
+     *
      * @return Gallery
      */
     private function setGallery(array $data, Gallery $album)
@@ -236,6 +240,7 @@ class YandexAdapter implements AdapterInterface
      *
      * @param  string $type album|photo|albumPhotos|albums or base path
      * @param  string $key
+     *
      * @return string
      */
     private function getUrl($type, $key)
@@ -269,7 +274,7 @@ class YandexAdapter implements AdapterInterface
     /**
      * set Cover List
      *
-     * @param array $listCover
+     * @param array   $listCover
      * @param Gallery $album
      */
     private function setListCover(array $listCover, Gallery $album)
@@ -280,20 +285,38 @@ class YandexAdapter implements AdapterInterface
     }
 
     /**
-     * get Data
+     * get Data By Type
      *
      * @param  string $key
      * @param  string $type
+     *
      * @return array
      */
-    private function getData($key, $type = 'photo')
+    private function getDataByType($key, $type = 'photo')
+    {
+        $url = $this->getUrl($type, $key);
+
+        return $this->getData($url);
+    }
+
+    /**
+     * get Data By Url
+     *
+     * @param string $url
+     *
+     * @return array
+     */
+    private function getData($url)
     {
         try {
-            $url = $this->getUrl($type, $key);
             $request = $this->client->get($url);
             $response = $request->send();
             $decoder = new JsonDecode(true);
             $data = $decoder->decode($response->getBody(true), 'json');
+            if (isset($data['links']['next'])) {
+                $next = $this->getData($data['links']['next']);
+                $data['entries'] = array_merge($data['entries'], $next['entries']);
+            }
         } catch (\Exception $e) {
             $data = array();
         }
