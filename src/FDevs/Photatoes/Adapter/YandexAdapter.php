@@ -148,7 +148,7 @@ class YandexAdapter implements AdapterInterface
      */
     public function getImagesByTag($tag, Manager $manager = null)
     {
-        $data = $this->getDataByType(urlencode($tag), 'tag');
+        $data = $this->getDataByType(rawurlencode($tag), 'tag');
         $images = array();
         if (isset($data['entries'])) {
             foreach ($data['entries'] as $img) {
